@@ -7,7 +7,7 @@ import {
   SearchMatches,
   SearchMatchPart,
 } from 'obsidian';
-import CitationPlugin from './main';
+import CtagsPlugin from './main';
 import { Entry } from './types';
 
 // Stub some methods we know are there..

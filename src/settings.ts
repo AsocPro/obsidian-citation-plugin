@@ -7,7 +7,7 @@ import {
   Setting,
 } from 'obsidian';
 
-import CitationPlugin from './main';
+import CtagsPlugin from './main';
 import { IIndexable, DatabaseType, TEMPLATE_VARIABLES } from './types';
 
 const CITATION_DATABASE_FORMAT_LABELS: Record<DatabaseType, string> = {
@@ -32,8 +32,8 @@ export class CitationsPluginSettings {
   alternativeMarkdownCitationTemplate = '@{{citekey}}';
 }
 
-export class CitationSettingTab extends PluginSettingTab {
-  private plugin: CitationPlugin;
+export class CtagsSettingTab extends PluginSettingTab {
+  private plugin: CtagsPlugin;
 
   citationPathLoadingEl: HTMLElement;
   citationPathErrorEl: HTMLElement;

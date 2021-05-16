@@ -22,7 +22,7 @@ import {
   OpenNoteModal,
 } from './modals';
 import { VaultExt } from './obsidian-extensions.d';
-import { CitationSettingTab, CitationsPluginSettings } from './settings';
+import { CtagsSettingTab, CitationsPluginSettings } from './settings';
 import {
   Entry,
   EntryData,
@@ -39,7 +39,7 @@ import {
 } from './util';
 import LoadWorker from 'web-worker:./worker';
 
-export default class CitationPlugin extends Plugin {
+export default class CtagsPlugin extends Plugin {
   settings: CitationsPluginSettings;
   library: Library;
 
@@ -164,7 +164,7 @@ export default class CitationPlugin extends Plugin {
       },
     });
 
-    this.addSettingTab(new CitationSettingTab(this.app, this));
+    this.addSettingTab(new CtagsSettingTab(this.app, this));
   }
 
   /**
