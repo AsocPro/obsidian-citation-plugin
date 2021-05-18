@@ -1,7 +1,7 @@
 {
-  "name": "obsidian-citation-plugin",
-  "version": "0.4.3",
-  "description": "Automatically search and insert citations from a Zotero library",
+  "name": "obsidian-ctags-plugin",
+  "version": "0.0.1",
+  "description": "Insert code references from a ctags file",
   "main": "main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
@@ -17,7 +17,7 @@
     ]
   },
   "keywords": [],
-  "author": "Jon Gauthier",
+  "author": "AsocPro",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.1.0",
