@@ -53,7 +53,7 @@ export default class CtagsPlugin extends Plugin {
   });
 
   loadErrorNotifier = new Notifier(
-    'Unable to load citations. Please update Citations plugin settings.',
+    'Unable to load tags file. Please update Ctags plugin settings.',
   );
   literatureNoteErrorNotifier = new Notifier(
     'Unable to access literature note. Please check that the literature note folder exists, or update the Citations plugin settings.',
