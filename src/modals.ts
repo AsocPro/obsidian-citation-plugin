@@ -19,7 +19,7 @@ interface ChooserExt {
 }
 
 class SearchModal extends FuzzySuggestModal<Entry> {
-  plugin: CitationPlugin;
+  plugin: CtagsPlugin;
   limit = 50;
 
   loadingEl: HTMLElement;
@@ -27,7 +27,7 @@ class SearchModal extends FuzzySuggestModal<Entry> {
   // How frequently should we check whether the library is still loading?
   loadingCheckInterval = 250;
 
-  constructor(app: App, plugin: CitationPlugin) {
+  constructor(app: App, plugin: CtagsPlugin) {
     super(app);
     this.plugin = plugin;
 
@@ -181,7 +181,7 @@ class SearchModal extends FuzzySuggestModal<Entry> {
 }
 
 export class OpenNoteModal extends SearchModal {
-  constructor(app: App, plugin: CitationPlugin) {
+  constructor(app: App, plugin: CtagsPlugin) {
     super(app, plugin);
 
     this.setInstructions([
@@ -218,7 +218,7 @@ export class OpenNoteModal extends SearchModal {
 }
 
 export class InsertNoteLinkModal extends SearchModal {
-  constructor(app: App, plugin: CitationPlugin) {
+  constructor(app: App, plugin: CtagsPlugin) {
     super(app, plugin);
 
     this.setInstructions([
@@ -235,7 +235,7 @@ export class InsertNoteLinkModal extends SearchModal {
 }
 
 export class InsertNoteContentModal extends SearchModal {
-  constructor(app: App, plugin: CitationPlugin) {
+  constructor(app: App, plugin: CtagsPlugin) {
     super(app, plugin);
 
     this.setInstructions([
@@ -255,7 +255,7 @@ export class InsertNoteContentModal extends SearchModal {
 }
 
 export class InsertCitationModal extends SearchModal {
-  constructor(app: App, plugin: CitationPlugin) {
+  constructor(app: App, plugin: CtagsPlugin) {
     super(app, plugin);
 
     this.setInstructions([
