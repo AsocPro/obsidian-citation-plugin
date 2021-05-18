@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-citation-plugin",
-	"name": "Citations",
-	"version": "0.4.3",
+	"id": "obsidian-ctags-plugin",
+	"name": "Ctags",
+	"version": "0.0.1",
 	"minAppVersion": "0.9.20",
-	"description": "Automatically search and insert citations from a Zotero library",
-	"author": "Jon Gauthier",
-	"authorUrl": "http://foldl.me",
+	"description": "Insert code references from a ctags file",
+	"author": "AsocPro",
+	"authorUrl": "http://asoc.pro",
 	"isDesktopOnly": false
 }
