@@ -39,7 +39,7 @@ export class CtagsSettingTab extends PluginSettingTab {
   citationPathErrorEl: HTMLElement;
   citationPathSuccessEl: HTMLElement;
 
-  constructor(app: App, plugin: CitationPlugin) {
+  constructor(app: App, plugin: CtagsPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
