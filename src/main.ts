@@ -22,7 +22,7 @@ import {
   OpenNoteModal,
 } from './modals';
 import { VaultExt } from './obsidian-extensions.d';
-import { CtagsSettingTab, CitationsPluginSettings } from './settings';
+import { CtagsSettingTab, CtagsPluginSettings } from './settings';
 import {
   Entry,
   EntryData,
@@ -40,7 +40,7 @@ import {
 import LoadWorker from 'web-worker:./worker';
 
 export default class CtagsPlugin extends Plugin {
-  settings: CitationsPluginSettings;
+  settings: CtagsPluginSettings;
   library: Library;
 
   // Template compilation options
@@ -68,7 +68,7 @@ export default class CtagsPlugin extends Plugin {
   }
 
   async loadSettings(): Promise<void> {
-    this.settings = new CitationsPluginSettings();
+    this.settings = new CtagsPluginSettings ();
 
     const loadedSettings = await this.loadData();
     if (!loadedSettings) return;
@@ -180,7 +180,7 @@ export default class CtagsPlugin extends Plugin {
   }
 
   async loadLibrary(): Promise<Library> {
-    console.debug('Citation plugin: Reloading library');
+    console.debug('Ctags plugin: Reloading library');
     if (this.settings.citationExportPath) {
       const filePath = this.resolveLibraryPath(
         this.settings.citationExportPath,
@@ -225,7 +225,7 @@ export default class CtagsPlugin extends Plugin {
             ),
           );
           console.debug(
-            `Citation plugin: successfully loaded library with ${this.library.size} entries.`,
+            `Ctags plugin: successfully loaded library with ${this.library.size} entries.`,
           );
 
           return this.library;
@@ -244,7 +244,7 @@ export default class CtagsPlugin extends Plugin {
         });
     } else {
       console.warn(
-        'Citations plugin: citation export path is not set. Please update plugin settings.',
+        'Ctags plugin: citation export path is not set. Please update plugin settings.',
       );
     }
   }

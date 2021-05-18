@@ -15,7 +15,7 @@ const CITATION_DATABASE_FORMAT_LABELS: Record<DatabaseType, string> = {
   biblatex: 'BibLaTeX',
 };
 
-export class CitationsPluginSettings {
+export class CtagsPluginSettings {
   public citationExportPath: string;
   citationExportFormat: DatabaseType = 'csl-json';
 
