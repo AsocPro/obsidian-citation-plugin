@@ -75,12 +75,6 @@ export default class CtagsPlugin extends Plugin {
 
     const toLoad = [
       'citationExportPath',
-      'citationExportFormat',
-      'literatureNoteTitleTemplate',
-      'literatureNoteFolder',
-      'literatureNoteContentTemplate',
-      'markdownCitationTemplate',
-      'alternativeMarkdownCitationTemplate',
     ];
     toLoad.forEach((setting) => {
       if (setting in loadedSettings) {
@@ -201,23 +195,15 @@ export default class CtagsPlugin extends Plugin {
 
           return this.loadWorker.post({
             databaseRaw: value,
-            databaseType: this.settings.citationExportFormat,
           });
         })
         .then((entries: EntryData[]) => {
           let adapter: new (data: EntryData) => Entry;
           let idKey: string;
 
-          switch (this.settings.citationExportFormat) {
-            case 'biblatex':
-              adapter = EntryBibLaTeXAdapter;
-              idKey = 'key';
-              break;
-            case 'csl-json':
-              adapter = EntryCSLAdapter;
-              idKey = 'id';
-              break;
-          }
+          //TODO this are part of the settings that have been removed
+          adapter = EntryBibLaTeXAdapter;
+          idKey = 'key';
 
           this.library = new Library(
             Object.fromEntries(
@@ -256,26 +242,6 @@ export default class CtagsPlugin extends Plugin {
     return this.loadWorker.blocked;
   }
 
-  get literatureNoteTitleTemplate(): Template {
-    return compileTemplate(
-      this.settings.literatureNoteTitleTemplate,
-      this.templateSettings,
-    );
-  }
-
-  get literatureNoteContentTemplate(): Template {
-    return compileTemplate(
-      this.settings.literatureNoteContentTemplate,
-      this.templateSettings,
-    );
-  }
-
-  get markdownCitationTemplate(): Template {
-    return compileTemplate(
-      this.settings.markdownCitationTemplate,
-      this.templateSettings,
-    );
-  }
 
   get alternativeMarkdownCitationTemplate(): Template {
     return compileTemplate(
@@ -284,43 +250,12 @@ export default class CtagsPlugin extends Plugin {
     );
   }
 
-  getTitleForCitekey(citekey: string): string {
-    const unsafeTitle = this.literatureNoteTitleTemplate(
-      this.library.getTemplateVariablesForCitekey(citekey),
-    );
-    return unsafeTitle.replace(DISALLOWED_FILENAME_CHARACTERS_RE, '_');
-  }
-
-  getPathForCitekey(citekey: string): string {
-    const title = this.getTitleForCitekey(citekey);
-    // TODO escape note title
-    return path.join(this.settings.literatureNoteFolder, `${title}.md`);
-  }
-
-  getInitialContentForCitekey(citekey: string): string {
-    return this.literatureNoteContentTemplate(
-      this.library.getTemplateVariablesForCitekey(citekey),
-    );
-  }
-
-  getMarkdownCitationForCitekey(citekey: string): string {
-    return this.markdownCitationTemplate(
-      this.library.getTemplateVariablesForCitekey(citekey),
-    );
-  }
-
-  getAlternativeMarkdownCitationForCitekey(citekey: string): string {
-    return this.alternativeMarkdownCitationTemplate(
-      this.library.getTemplateVariablesForCitekey(citekey),
-    );
-  }
-
   /**
    * Run a case-insensitive search for the literature note file corresponding to
    * the given citekey. If no corresponding file is found, create one.
    */
   async getOrCreateLiteratureNoteFile(citekey: string): Promise<TFile> {
-    const path = this.getPathForCitekey(citekey);
+    const path = 'path';
     const normalizedPath = normalizePath(path);
 
     let file = this.app.vault.getAbstractFileByPath(normalizedPath);
@@ -335,7 +270,6 @@ export default class CtagsPlugin extends Plugin {
         try {
           file = await this.app.vault.create(
             path,
-            this.getInitialContentForCitekey(citekey),
           );
         } catch (exc) {
           this.literatureNoteErrorNotifier.show();
@@ -361,7 +295,7 @@ export default class CtagsPlugin extends Plugin {
         const useMarkdown: boolean = (<VaultExt>this.app.vault).getConfig(
           'useMarkdownLinks',
         );
-        const title = this.getTitleForCitekey(citekey);
+        const title = 'TODO REMOVED'
 
         let linkText: string;
         if (useMarkdown) {
@@ -383,7 +317,7 @@ export default class CtagsPlugin extends Plugin {
    * currently active pane.
    */
   async insertLiteratureNoteContent(citekey: string): Promise<void> {
-    const content = this.getInitialContentForCitekey(citekey);
+    const content = 'TODO REMOVE';
     this.editor.replaceRange(content, this.editor.getCursor());
   }
 
@@ -391,11 +325,12 @@ export default class CtagsPlugin extends Plugin {
     citekey: string,
     alternative = false,
   ): Promise<void> {
-    const func = alternative
-      ? this.getAlternativeMarkdownCitationForCitekey
-      : this.getMarkdownCitationForCitekey;
-    const citation = func.bind(this)(citekey);
+        // TODO CTAGS this looks like it could be helpful for inserting stuff so I'm leaving it here for now
+    //const func = alternative
+     // ? this.getAlternativeMarkdownCitationForCitekey
+      //: this.getMarkdownCitationForCitekey;
+    //const citation = func.bind(this)(citekey);
 
-    this.editor.replaceRange(citation, this.editor.getCursor());
+    //this.editor.replaceRange(citation, this.editor.getCursor());
   }
 }
