@@ -74,7 +74,7 @@ export default class CtagsPlugin extends Plugin {
     if (!loadedSettings) return;
 
     const toLoad = [
-      'citationExportPath',
+      'ctagsFilePath',
     ];
     toLoad.forEach((setting) => {
       if (setting in loadedSettings) {
@@ -92,7 +92,7 @@ export default class CtagsPlugin extends Plugin {
   }
 
   async init(): Promise<void> {
-    if (this.settings.citationExportPath) {
+    if (this.settings.ctagsFilePath) {
       // Load library for the first time
       this.loadLibrary();
 
@@ -109,7 +109,7 @@ export default class CtagsPlugin extends Plugin {
         };
 
         chokidar
-          .watch(this.settings.citationExportPath, watchOptions)
+          .watch(this.settings.ctagsFilePath, watchOptions)
           .on('change', () => {
             this.loadLibrary();
           });
@@ -175,9 +175,9 @@ export default class CtagsPlugin extends Plugin {
 
   async loadLibrary(): Promise<Library> {
     console.debug('Ctags plugin: Reloading library');
-    if (this.settings.citationExportPath) {
+    if (this.settings.ctagsFilePath) {
       const filePath = this.resolveLibraryPath(
-        this.settings.citationExportPath,
+        this.settings.ctagsFilePath,
       );
 
       // Unload current library.

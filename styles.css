@@ -86,28 +86,28 @@
 .d-none {
   display: none;
 }
-.zoteroSettingCitationPathLoading,
-.zoteroSettingCitationPathError,
-.zoteroSettingCitationPathSuccess {
+.settingCtagsFilePathLoading,
+.settingCtagsFilePathError,
+.settingCtagsFilePathSuccess {
   font-size: 14px;
 }
-.zoteroSettingCitationPathLoading {
+.settingCtagsFilePathLoading {
   color: var(--text-muted);
 }
-.zoteroSettingCitationPathError {
+.settingCtagsFilePathError {
   color: var(--text-error);
 }
-.zoteroSettingCitationPathError:hover {
+.settingCtagsFilePathError:hover {
   color: var(--text-error-hover);
 }
-.zoteroSettingCitationPathSuccess {
+.settingCtagsFilePathSuccess {
   color: var(--text-accent);
 }
-.zoteroSettingCitationPathSuccess:hover {
+.settingCtagsFilePathSuccess:hover {
   color: var(--text-accent-hover);
 }
 
-#zoteroSettingTab textarea {
+#settingCtagsTab textarea {
   resize: vertical;
   width: 100%;
   min-height: 10em;

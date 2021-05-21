@@ -10,21 +10,16 @@ import {
 import CtagsPlugin from './main';
 import { IIndexable, DatabaseType, TEMPLATE_VARIABLES } from './types';
 
-const CITATION_DATABASE_FORMAT_LABELS: Record<DatabaseType, string> = {
-  'csl-json': 'CSL-JSON',
-  biblatex: 'BibLaTeX',
-};
-
 export class CtagsPluginSettings {
-  public citationExportPath: string;
+  public ctagsFilePath: string;
 }
 
 export class CtagsSettingTab extends PluginSettingTab {
   private plugin: CtagsPlugin;
 
-  citationPathLoadingEl: HTMLElement;
-  citationPathErrorEl: HTMLElement;
-  citationPathSuccessEl: HTMLElement;
+  ctagsPathLoadingEl: HTMLElement;
+  ctagsPathErrorEl: HTMLElement;
+  ctagsPathSuccessEl: HTMLElement;
 
   constructor(app: App, plugin: CtagsPlugin) {
     super(app, plugin);
@@ -33,9 +28,9 @@ export class CtagsSettingTab extends PluginSettingTab {
 
   open(): void {
     super.open();
-    this.checkCitationExportPath(
-      this.plugin.settings.citationExportPath,
-    ).then(() => this.showCitationExportPathSuccess());
+    this.checkCtagsFilePath(
+      this.plugin.settings.ctagsFilePath,
+    ).then(() => this.showCtagsFilePathSuccess());
   }
 
   addValueChangeCallback<T extends HTMLTextAreaElement | HTMLInputElement>(
@@ -66,75 +61,76 @@ export class CtagsSettingTab extends PluginSettingTab {
     const { containerEl } = this;
 
     containerEl.empty();
-    containerEl.setAttr('id', 'zoteroSettingTab');
+    containerEl.setAttr('id', 'ctagsSettingTab');
 
-    containerEl.createEl('h2', { text: 'Citation plugin settings' });
+    containerEl.createEl('h2', { text: 'Ctags plugin settings' });
 
     // NB: we force reload of the library on path change.
     new Setting(containerEl)
-      .setName('Citation database path')
+      .setName('Ctags database path')
       .setDesc(
-        'Path to citation library exported by your reference manager. ' +
+        'Path to ctags file. ' +
           'Can be an absolute path or a path relative to the current vault root folder. ' +
-          'Citations will be automatically reloaded whenever this file updates.',
+          'File paths inside the ctags file should be relative to the tags file itself.' +
+          'Symbols will be automatically reloaded whenever this file updates.',
       )
       .addText((input) =>
         this.buildValueInput(
-          input.setPlaceholder('/path/to/export.json'),
-          'citationExportPath',
+          input.setPlaceholder('/path/to/tags'),
+          'ctagsFilePath',
           (value) => {
-            this.checkCitationExportPath(value).then(
+            this.checkCtagsFilePath(value).then(
               (success) =>
                 success &&
                 this.plugin
                   .loadLibrary()
-                  .then(() => this.showCitationExportPathSuccess()),
+                  .then(() => this.showCtagsFilePathSuccess()),
             );
           },
         ),
       );
 
-    this.citationPathLoadingEl = containerEl.createEl('p', {
-      cls: 'zoteroSettingCitationPathLoading d-none',
-      text: 'Loading citation database...',
+    this.ctagsPathLoadingEl = containerEl.createEl('p', {
+      cls: 'settingCtagsFilePathLoading d-none',
+      text: 'Loading tags file...',
     });
-    this.citationPathErrorEl = containerEl.createEl('p', {
-      cls: 'zoteroSettingCitationPathError d-none',
+    this.ctagsPathErrorEl = containerEl.createEl('p', {
+      cls: 'settingCtagsFilePathError d-none',
       text:
-        'The citation export file cannot be found. Please check the path above.',
+        'The tags file cannot be found. Please check the path above.',
     });
-    this.citationPathSuccessEl = containerEl.createEl('p', {
-      cls: 'zoteroSettingCitationPathSuccess d-none',
-      text: 'Loaded library with {{n}} references.',
+    this.ctagsPathSuccessEl = containerEl.createEl('p', {
+      cls: 'settingCtagsFilePathSuccess d-none',
+      text: 'Loaded tags file with {{n}} symbols.',
     });
   }
 
   /**
    * Returns true iff the path exists; displays error as a side-effect
    */
-  async checkCitationExportPath(filePath: string): Promise<boolean> {
-    this.citationPathLoadingEl.addClass('d-none');
+  async checkCtagsFilePath(filePath: string): Promise<boolean> {
+    this.ctagsPathLoadingEl.addClass('d-none');
 
     try {
       await FileSystemAdapter.readLocalFile(
         this.plugin.resolveLibraryPath(filePath),
       );
-      this.citationPathErrorEl.addClass('d-none');
+      this.ctagsPathErrorEl.addClass('d-none');
     } catch (e) {
-      this.citationPathSuccessEl.addClass('d-none');
-      this.citationPathErrorEl.removeClass('d-none');
+      this.ctagsPathSuccessEl.addClass('d-none');
+      this.ctagsPathErrorEl.removeClass('d-none');
       return false;
     }
 
     return true;
   }
 
-  showCitationExportPathSuccess(): void {
+  showCtagsFilePathSuccess(): void {
     if (!this.plugin.library) return;
 
-    this.citationPathSuccessEl.setText(
+    this.ctagsPathSuccessEl.setText(
       `Loaded library with ${this.plugin.library.size} references.`,
     );
-    this.citationPathSuccessEl.removeClass('d-none');
+    this.ctagsPathSuccessEl.removeClass('d-none');
   }
 }
