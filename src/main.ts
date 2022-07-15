@@ -92,6 +92,8 @@ export default class CtagsPlugin extends Plugin {
   }
 
   async init(): Promise<void> {
+
+    console.debug('test debug thing');
     if (this.settings.ctagsFilePath) {
       // Load library for the first time
       this.loadLibrary();
@@ -192,23 +194,19 @@ export default class CtagsPlugin extends Plugin {
           const dataView = new DataView(buffer);
           const decoder = new TextDecoder('utf8');
           const value = decoder.decode(dataView);
-
-          return this.loadWorker.post({
-            databaseRaw: value,
-          });
-        })
-        .then((entries: EntryData[]) => {
-          let adapter: new (data: EntryData) => Entry;
-          let idKey: string;
-
-          //TODO this are part of the settings that have been removed
-          adapter = EntryBibLaTeXAdapter;
-          idKey = 'key';
+          let entries: Entry[];
+          entries = [];
+          let lines = value.split(/[\r\n]+/);
+          lines.forEach((line) => { 
+              // Skip empty lines
+              if (line && line.length > 0) {
+                let ctagEntry = line.split('\t');
+                entries.push({name: ctagEntry[0], file: ctagEntry[1], pattern: ctagEntry[2]});
+              }
+            });
 
           this.library = new Library(
-            Object.fromEntries(
-              entries.map((e) => [(e as IIndexable)[idKey], new adapter(e)]),
-            ),
+              entries
           );
           console.debug(
             `Ctags plugin: successfully loaded library with ${this.library.size} entries.`,
@@ -245,7 +243,7 @@ export default class CtagsPlugin extends Plugin {
 
   get alternativeMarkdownCitationTemplate(): Template {
     return compileTemplate(
-      this.settings.alternativeMarkdownCitationTemplate,
+      //this.settings.alternativeMarkdownCitationTemplate,
       this.templateSettings,
     );
   }
@@ -268,9 +266,11 @@ export default class CtagsPlugin extends Plugin {
         file = matches[0];
       } else {
         try {
+/** TODO asocpro compile error commenting out
           file = await this.app.vault.create(
             path,
           );
+**/
         } catch (exc) {
           this.literatureNoteErrorNotifier.show();
           throw exc;
@@ -289,27 +289,23 @@ export default class CtagsPlugin extends Plugin {
       .catch(console.error);
   }
 
-  async insertLiteratureNoteLink(citekey: string): Promise<void> {
-    this.getOrCreateLiteratureNoteFile(citekey)
-      .then((file: TFile) => {
-        const useMarkdown: boolean = (<VaultExt>this.app.vault).getConfig(
-          'useMarkdownLinks',
-        );
-        const title = 'TODO REMOVED'
+  async insertLiteratureNoteLink(entry: Entry): Promise<void> {
+    const useMarkdown: boolean = (<VaultExt>this.app.vault).getConfig(
+       'useMarkdownLinks',
+      );
+    const title = entry.name
 
-        let linkText: string;
-        if (useMarkdown) {
-          const uri = encodeURI(
-            this.app.metadataCache.fileToLinktext(file, '', false),
-          );
-          linkText = `[${title}](${uri})`;
-        } else {
-          linkText = `[[${title}]]`;
-        }
+    let linkText: string;
+    if (useMarkdown) {
+      const uri = encodeURI(
+        this.app.metadataCache.fileToLinktext(entry.file, '', false),
+      );
+      linkText = `[${title}](${uri})`;
+    } else {
+      linkText = `[[${title}]]`;
+    }
 
-        this.editor.replaceRange(linkText, this.editor.getCursor());
-      })
-      .catch(console.error);
+    this.editor.replaceRange(linkText, this.editor.getCursor());
   }
 
   /**

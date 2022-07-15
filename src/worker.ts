@@ -1,9 +1,10 @@
 import registerPromiseWorker from 'promise-worker/register';
 
-import { DatabaseType, EntryData, loadEntries } from './types';
+import { DatabaseType, Entry, loadEntries } from './types';
 
 registerPromiseWorker(
-  (msg: { databaseRaw: string; databaseType: DatabaseType }): EntryData[] => {
-    return loadEntries(msg.databaseRaw, msg.databaseType);
+  (entryArray: Entry[]): Entry[] => {
+    return entryArray;
+    //return loadEntries(msg.ctagsFileLocation);
   },
 );

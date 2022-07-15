@@ -92,28 +92,26 @@ class SearchModal extends FuzzySuggestModal<Entry> {
   }
 
   getItemText(item: Entry): string {
-    return `${item.title} ${item.authorString} ${item.year}`;
+    return `${item.name} ${item.file} ${item.pattern}`;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onChooseItem(item: Entry, evt: MouseEvent | KeyboardEvent): void {
-    this.plugin.openLiteratureNote(item.id, false).catch(console.error);
+    this.plugin.openLiteratureNote(item.name, false).catch(console.error);
   }
 
   renderSuggestion(match: FuzzyMatch<Entry>, el: HTMLElement): void {
     el.empty();
     const entry = match.item;
-    const entryTitle = entry.title || '';
+    const entryTitle = entry.name || '';
 
     const container = el.createEl('div', { cls: 'zoteroResult' });
     const titleEl = container.createEl('span', {
       cls: 'zoteroTitle',
     });
-    container.createEl('span', { cls: 'zoteroCitekey', text: entry.id });
+    container.createEl('span', { cls: 'zoteroCitekey', text: entry.name });
 
-    const authorsCls = entry.authorString
-      ? 'zoteroAuthors'
-      : 'zoteroAuthors zoteroAuthorsEmpty';
+    const authorsCls = entry.file;
     const authorsEl = container.createEl('span', {
       cls: authorsCls,
     });
@@ -152,14 +150,14 @@ class SearchModal extends FuzzySuggestModal<Entry> {
       entryTitle,
       shiftMatches(allMatches, 0, entryTitle.length),
     );
-    if (entry.authorString) {
+    if (entry.file) {
       renderMatches(
         authorsEl,
-        entry.authorString,
+        entry.file,
         shiftMatches(
           allMatches,
           authorStringOffset,
-          authorStringOffset + entry.authorString.length,
+          authorStringOffset + entry.file.length,
         ),
       );
     }
@@ -230,7 +228,7 @@ export class InsertNoteLinkModal extends SearchModal {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onChooseItem(item: Entry, evt: unknown): void {
-    this.plugin.insertLiteratureNoteLink(item.id).catch(console.error);
+    this.plugin.insertLiteratureNoteLink(item).catch(console.error);
   }
 }
 
