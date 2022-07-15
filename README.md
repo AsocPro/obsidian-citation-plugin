@@ -6,7 +6,7 @@ Currently this plugin is going under the initial development phase so some of th
 
 Initial support will be for VSCode and MacVim. If you have other editors you would like to be supported let me know and I'll see what I can do.
 
-Note: This plugin hasnt been tested on mobile and isn't likely to work there.
+Note: This plugin hasnt been tested on mobile and isn't likely to work there initially. It will likely require the tags file being inside the Vault. I'll look into this once I get basic functionality working.
 
 This plugin is a fork of [hans/obsidian-citation-plugin](https://github.com/hans/obsidian-citation-plugin) and all credit for the heavy lifting should be sent that way. My changes more or less swap out the data source that is used.
 
